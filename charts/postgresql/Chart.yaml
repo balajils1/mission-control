@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: apps/v1
 appVersion: 9.6.2
 description: Object-relational database management system (ORDBMS) with an emphasis
   on extensibility and on standards-compliance.
