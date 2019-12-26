@@ -1,0 +1,225 @@
+database:
+  host: null
+  jfexPassword: null
+  jfexSchema: insight_executor
+  jfexUsername: jfex
+  jfisPassword: null
+  jfisSchema: insight_server
+  jfisUsername: jfis
+  jfmcPassword: null
+  jfmcSchema: jfmc_server
+  jfmcUsername: jfmc
+  jfscPassword: null
+  jfscSchema: insight_scheduler
+  jfscUsername: jfsc
+  name: mission_control
+  password: null
+  port: null
+  secrets: {}
+  type: postgresql
+  user: null
+dbSetup:
+  postgresql:
+    image:
+      pullPolicy: IfNotPresent
+      repository: postgres
+      tag: 9.6.11-alpine
+elasticsearch:
+  enabled: true
+  env:
+    clusterName: es-cluster
+    maxMapCount: 262144
+    minimumMasterNodes: 1
+    networkHost: 0.0.0.0
+    transportHost: 0.0.0.0
+  httpPort: 9200
+  image:
+    pullPolicy: IfNotPresent
+    repository: docker.bintray.io/jfrog/elasticsearch-oss-sg
+    tag: 6.6.0
+  initContainerImage: alpine:3.6
+  javaOpts: {}
+  name: elasticsearch
+  password: admin
+  persistence:
+    accessMode: ReadWriteOnce
+    enabled: true
+    mountPath: /usr/share/elasticsearch/data
+    size: 100Gi
+  resources: {}
+  transportPort: 9300
+  url: http://localhost:9200
+  username: admin
+imagePullPolicy: IfNotPresent
+imagePullSecrets: null
+ingress:
+  annotations: {}
+  enabled: true
+  hosts:
+  - chart-example.local
+  path: /
+  tls: []
+initContainerImage: alpine:3.8
+insightExecutor:
+  home: /opt/jfrog
+  image: docker.bintray.io/jfrog/insight-executor
+  internalPort: 8087
+  javaOpts: {}
+  loggers: []
+  name: insight-executor
+  persistence:
+    accessMode: ReadWriteOnce
+    enabled: false
+    mountPath: /opt/jfrog/insight-executor/logs
+    size: 10Gi
+  resources: {}
+insightScheduler:
+  home: /opt/jfrog
+  image: docker.bintray.io/jfrog/insight-scheduler
+  internalPort: 8085
+  javaOpts: {}
+  loggers: []
+  name: insight-scheduler
+  persistence:
+    accessMode: ReadWriteOnce
+    enabled: false
+    mountPath: /opt/jfrog/insight-scheduler/logs
+    size: 10Gi
+  resources: {}
+insightServer:
+  allowIP: 0.0.0.0/0
+  home: /opt/jfrog
+  image: docker.bintray.io/jfrog/insight-server
+  internalHttpPort: 8082
+  loggers: []
+  name: insight-server
+  persistence:
+    accessMode: ReadWriteOnce
+    enabled: false
+    mountPath: /opt/jfrog/insight-server/logs
+    size: 10Gi
+  resources: {}
+logger:
+  image:
+    repository: busybox
+    tag: "1.30"
+missionControl:
+  affinity: {}
+  appName: jfmc-server
+  customInitContainers: ""
+  customVolumeMounts: ""
+  customVolumes: ""
+  dist: helm
+  externalPort: 90
+  home: /var/opt/jfrog/mission-control
+  image: docker.bintray.io/jfrog/mission-control
+  internalPort: 8080
+  javaOpts:
+    other: -server -XX:+UseG1GC -Dfile.encoding=UTF8
+  loggers: []
+  mcKey: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+  missionControlUrl: null
+  name: mission-control
+  nodeSelector: {}
+  osDist: NA
+  osType: NA
+  osVersion: NA
+  package: mc-docker-installer
+  persistence:
+    accessMode: ReadWriteOnce
+    enabled: true
+    mountPath: /var/opt/jfrog/mission-control
+    size: 100Gi
+  podRestartTime: null
+  propertyOverride: true
+  repository: jfrog-mission-control
+  resources: {}
+  service:
+    annotations: {}
+    type: LoadBalancer
+  tolerations: []
+networkpolicy:
+- egress:
+  - {}
+  ingress:
+  - {}
+  name: mission-control
+  podSelector:
+    matchLabels:
+      app: mission-control
+podRestartTime: null
+postgresql:
+  affinity: {}
+  db:
+    jfexPassword: null
+    jfexSchema: insight_executor
+    jfexUsername: jfex
+    jfisPassword: null
+    jfisSchema: insight_server
+    jfisUsername: jfis
+    jfmcPassword: null
+    jfmcSchema: jfmc_server
+    jfmcUsername: jfmc
+    jfscPassword: null
+    jfscSchema: insight_scheduler
+    jfscUsername: jfsc
+    name: mission_control
+    sslmode: "false"
+    tablespace: pg_default
+  enabled: true
+  global: {}
+  image: postgres
+  imageTag: 9.6.11
+  metrics:
+    enabled: false
+    image: wrouesnel/postgres_exporter
+    imagePullPolicy: IfNotPresent
+    imageTag: v0.1.1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+  networkPolicy:
+    allowExternal: true
+    enabled: false
+  nodeSelector: {}
+  persistence:
+    accessMode: ReadWriteOnce
+    enabled: true
+    existingClaim: null
+    mountPath: /var/lib/postgresql/data/pgdata
+    size: 50Gi
+    subPath: postgresql-db
+  postgresConfig:
+    maxConnections: "1500"
+  postgresPassword: null
+  postgresUsername: postgres
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  service:
+    externalIPs: []
+    port: 5432
+    type: ClusterIP
+  tolerations: []
+rbac:
+  create: true
+  role:
+    rules:
+    - apiGroups:
+      - ""
+      resources:
+      - services
+      - endpoints
+      - pods
+      verbs:
+      - get
+      - watch
+      - list
+replicaCount: 1
+serviceAccount:
+  create: true
+  name: null
+uid: 1050
+uname: jfmc
