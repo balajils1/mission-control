@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 appVersion: 3.5.5
 description: A Helm chart for JFrog Mission Control
 home: https://jfrog.com/mission-control/
