@@ -186,7 +186,7 @@ postgresql:
   persistence:
     accessMode: ReadWriteOnce
     enabled: true
-    existingClaim: mission-control-postgresql
+    existingClaim: null
     mountPath: /var/lib/postgresql/data/pgdata
     size: 50Gi
     subPath: postgresql-db
