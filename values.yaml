@@ -136,7 +136,7 @@ missionControl:
   resources: {}
   service:
     annotations: {}
-    type: LoadBalancer
+    type: NodePort
   tolerations: []
 networkpolicy:
 - egress:
